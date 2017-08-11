@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from flask import Flask, redirect
 
+
 app = Flask(__name__)
 
 

@@ -2,12 +2,12 @@
 
 from __future__ import unicode_literals
 
-from flask import Flask
+from flask import Blueprint
 from flask.templating import render_template
 
-app = Flask(__name__)
+blueprint = Blueprint('subscriptions', __name__, template_folder='templates')
 
 
-@app.route("/inscricao/")
+@blueprint.route("/")
 def form():
     return render_template('subscriptions_form.html')

@@ -3,13 +3,10 @@ from __future__ import absolute_import, unicode_literals
 
 import pytest
 
-from subscriptions.handlers import app
-
 
 @pytest.fixture
-def resp():
-    client = app.test_client()
-    return client.get('/inscricao/')
+def resp(test_client):
+    return test_client.get('/inscricao/')
 
 
 def test_status_code(resp):
