@@ -33,3 +33,16 @@ def test_new_link_in_action(resp):
     action_path = url_for('subscriptions.new', _external=False)
     action_attr = 'action="%s"' % action_path
     assert action_attr in resp.data.decode('utf8')
+
+
+def test_new_status_code(test_client):
+    resp = test_client.post(
+        url_for('subscriptions.new'),
+        data={
+            'name': 'Renzo Nuccitelli',
+            'cpf': '12345678901',
+            'email': 'renzo@python.pro.br'
+
+        }
+    )
+    assert 200 == resp.status_code
