@@ -4,6 +4,8 @@ from __future__ import absolute_import, unicode_literals
 import pytest
 from flask import url_for
 
+from subscriptions.model import Subscription
+
 
 @pytest.fixture
 def resp(test_client):
@@ -35,7 +37,8 @@ def test_new_link_in_action(resp):
     assert action_attr in resp.data.decode('utf8')
 
 
-def test_new_status_code(test_client):
+@pytest.fixture
+def resp_new(test_client):
     resp = test_client.post(
         url_for('subscriptions.new'),
         data={
@@ -45,4 +48,13 @@ def test_new_status_code(test_client):
 
         }
     )
-    assert 200 == resp.status_code
+    return resp
+
+
+def test_new_status_code(resp_new):
+    assert 200 == resp_new.status_code
+
+
+def test_new_save(resp_new):
+    query = Subscription.query()
+    assert 1 == query.count()
