@@ -2,7 +2,8 @@
 
 from __future__ import unicode_literals
 
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for, \
+    jsonify
 
 from subscriptions.model import Subscription
 
@@ -20,4 +21,19 @@ def new():
     subscription = Subscription(
         name=form['name'], cpf=form['cpf'], email=form['email'])
     subscription.put()
-    return 'OK'
+    return redirect(url_for('.ok', _external=False))
+
+
+@blueprint.route("/ok")
+def ok():
+    query = Subscription.query().order(-Subscription.creation)
+
+    last_subscription = query.get()
+    dct = {
+        'id': last_subscription.key.id(),
+        'name': last_subscription.name,
+        'cpf': last_subscription.cpf,
+        'email': last_subscription.email,
+        'creation': last_subscription.creation.strftime('%Y-%m-%DT%H:%M:%S'),
+    }
+    return jsonify(dct)

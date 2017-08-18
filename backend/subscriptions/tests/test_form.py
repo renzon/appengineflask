@@ -48,13 +48,13 @@ def resp_new(test_client):
             'name': 'Renzo Nuccitelli',
             'cpf': '12345678901',
             'email': 'renzo@python.pro.br'
-        }
+        },
     )
     return resp
 
 
 def test_new_status_code(resp_new):
-    assert 200 == resp_new.status_code
+    assert 302 == resp_new.status_code
 
 
 def test_new_save(resp_new):
@@ -72,3 +72,6 @@ def test_form_properties(resp_new):
     assert isinstance(subscription.key, ndb.Key)
     assert isinstance(subscription.key.id(), long)
     assert subscription.key.kind() == 'Subscription'
+
+
+
