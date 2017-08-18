@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
+from datetime import datetime
+
 import pytest
 from flask import url_for
+from google.appengine.ext import ndb
 
 from subscriptions.model import Subscription
 
@@ -45,7 +48,6 @@ def resp_new(test_client):
             'name': 'Renzo Nuccitelli',
             'cpf': '12345678901',
             'email': 'renzo@python.pro.br'
-
         }
     )
     return resp
@@ -58,3 +60,15 @@ def test_new_status_code(resp_new):
 def test_new_save(resp_new):
     query = Subscription.query()
     assert 1 == query.count()
+
+
+def test_form_properties(resp_new):
+    query = Subscription.query()
+    subscription = query.get()
+    assert subscription.name == 'Renzo Nuccitelli'
+    assert subscription.cpf == '12345678901'
+    assert subscription.email == 'renzo@python.pro.br'
+    assert isinstance(subscription.creation, datetime)
+    assert isinstance(subscription.key, ndb.Key)
+    assert isinstance(subscription.key.id(), long)
+    assert subscription.key.kind() == 'Subscription'
